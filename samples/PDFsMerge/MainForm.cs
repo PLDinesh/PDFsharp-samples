@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using NLog;
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
+using PdfSharp;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 
 namespace MergePDFsTool
 {
@@ -61,17 +62,17 @@ namespace MergePDFsTool
                 {
                     _logger.Info("Merging to {0}", DlgBrowsePDFs.FileName);
                     // step 1: creation of a document-object
-                    Document document = new Document();
+                    PdfDocument document = new PdfDocument();
 
                     // step 2: we create a writer that listens to the document
-                    PdfCopy writer = new PdfCopy(document, new FileStream(DlgSaveMergedFile.FileName, FileMode.Create));
-                    if (writer == null)
-                    {
-                        return;
-                    }
+                    //PdfCopy writer = new PdfCopy(document, new FileStream(DlgSaveMergedFile.FileName, FileMode.Create));
+                    //if (writer == null)
+                    //{
+                    //    return;
+                    //}
                     bool HasAnythingFailed = false;
                     // step 3: we open the document
-                    document.Open();
+                    //document.Open();
                     try
                     {
                         foreach (string FileName in SelectedFilesText.Text.Split(new char[] { '\r', '\n' }))
@@ -83,8 +84,13 @@ namespace MergePDFsTool
                                 {
                                     _logger.Info("Merging- {0}", FileNametrunc);
                                     // we create a reader for a certain document
-                                    PdfReader reader = new PdfReader(FileNametrunc);
-                                    writer.AddDocument(reader);
+                                   PdfDocument reader = PdfReader.Open(FileNametrunc,PdfDocumentOpenMode.Import);
+                                    for(int i=0;i<reader.PageCount;i++)
+                                    {
+                                        PdfPage page = reader.Pages[i];
+                                        document.AddPage(page);
+                                    }
+
                                     reader.Close();
                                 }
                             }
@@ -94,6 +100,8 @@ namespace MergePDFsTool
                                 HasAnythingFailed = true;
                             }
                         }
+                        //Try and save the document
+                        document.Save(DlgSaveMergedFile.FileName);
                     }
                     catch (Exception inner2)
                     {
