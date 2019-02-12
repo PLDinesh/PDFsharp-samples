@@ -37,9 +37,6 @@
       <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PdfSharp">
-      <HintPath>..\..\..\..\PDFsharp\PDFsharp\src\PdfSharp\bin\Debug\PdfSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -98,6 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OriginalPDFSharp\PdfSharp\PdfSharp.csproj">
+      <Project>{5a6055bc-bf86-4fdd-9f62-0109db7a303b}</Project>
+      <Name>PdfSharp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
